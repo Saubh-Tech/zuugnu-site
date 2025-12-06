@@ -193,16 +193,17 @@ export default function AuthPage() {
   };
 
   const handleOpenWhatsApp = () => {
-    if (!fullName.trim()) {
-      alert('Please enter your name');
+    const trimmed = fullName.trim();
+    if (!trimmed) {
+      alert("Please enter your name");
       return;
     }
-    const message = `Register ${fullName}`;
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/918800607598?text=${encodedMessage}`, '_blank');
-    setFullName('');
-  };
 
+    const message = `Register: ${trimmed}`;
+    const encodedMessage = encodeURIComponent(message);
+
+    window.open(`https://wa.me/918800607598?text=${encodedMessage}`, "_blank");
+  };
   return (
     <main className={styles.authPage}>
       {/* Top Banner */}
@@ -245,7 +246,7 @@ export default function AuthPage() {
           <form className={styles.form}>
             <input
               type="text"
-              placeholder='"Register + Your Full Name"'
+              placeholder="Enter your Full Name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               className={styles.input}
