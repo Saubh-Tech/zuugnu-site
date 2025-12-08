@@ -9,11 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "next": "^16.1.0-canary.15",
+    "next": "^16.0.7",
     "react": "^19.2.1",
     "react-dom": "^19.2.1"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
