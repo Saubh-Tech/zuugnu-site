@@ -1,5 +1,5 @@
 // Public service worker file for PWA functionality
-const CACHE_NAME = 'zuugnu-v1';
+const CACHE_NAME = 'zuugnu-v2';
 const urlsToCache = [
   '/',
   '/favicon.icon.1.png',
