@@ -24,7 +24,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 170px;
 }
 
 .logoText {
@@ -34,16 +33,28 @@
   display: flex;
 }
 
-.logoZ { color: #6B8E23; }
-.logoU1 { color: #FFA500; }
-.logoU2 { color: #FFD700; }
-.logoG { color: #9370DB; }
-.logoN { color: #FF1493; }
-.logoU3 { color: #FF6347; }
+.logoZ {
+  color: #6b8e23;
+}
+.logoU1 {
+  color: #ffa500;
+}
+.logoU2 {
+  color: #ffd700;
+}
+.logoG {
+  color: #9370db;
+}
+.logoN {
+  color: #ff1493;
+}
+.logoU3 {
+  color: #ff6347;
+}
 
 .logoTagline {
   font-size: 11px;
-  color: #FFA500;
+  color: #ffa500;
   letter-spacing: 1px;
   margin-left: 2px;
 }
