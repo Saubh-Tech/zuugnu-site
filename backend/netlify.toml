@@ -1,0 +1,10 @@
+[build]
+  base = "backend"
+  command = "npm run build && npm run build:netlify"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/lambda"
+  status = 200
