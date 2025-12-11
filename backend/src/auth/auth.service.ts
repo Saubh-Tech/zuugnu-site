@@ -11,20 +11,65 @@ export class AuthService {
           private jwtService: JwtService,
      ) { }
 
+     private extractCountryCodeAndPhone(fullPhone: string): { countryCode: string; phoneNumber: string } {
+          // Remove all non-digit characters
+          const digitsOnly = fullPhone.replace(/\D/g, "");
+
+          let countryCode = "";
+          let phoneNumber = "";
+
+          // India: 91 + 10 digits
+          if (digitsOnly.startsWith("91") && digitsOnly.length === 12) {
+               countryCode = "91";
+               phoneNumber = digitsOnly.substring(2);
+          }
+          // US/Canada: 1 + 10 digits
+          else if (digitsOnly.startsWith("1") && digitsOnly.length === 11) {
+               countryCode = "1";
+               phoneNumber = digitsOnly.substring(1);
+          }
+          // UK: 44 + 10 digits
+          else if (digitsOnly.startsWith("44") && digitsOnly.length === 12) {
+               countryCode = "44";
+               phoneNumber = digitsOnly.substring(2);
+          }
+          // China: 86 + 11 digits
+          else if (digitsOnly.startsWith("86") && digitsOnly.length === 13) {
+               countryCode = "86";
+               phoneNumber = digitsOnly.substring(2);
+          }
+          // Default: assume phone number is 10 digits, rest is country code
+          else if (digitsOnly.length > 10) {
+               countryCode = digitsOnly.substring(0, digitsOnly.length - 10);
+               phoneNumber = digitsOnly.substring(digitsOnly.length - 10);
+          }
+          else {
+               // If less than or equal to 10 digits, assume no country code
+               countryCode = "";
+               phoneNumber = digitsOnly;
+          }
+
+          return { countryCode, phoneNumber };
+     }
+
      async login(phone: string, plainPassword: string) {
           const normalizedPhone = phone.replace(/\D/g, '');
           this.logger.log(`Attempting login for phone: ${normalizedPhone}`);
+
+          // Extract country code and phone number
+          const { countryCode, phoneNumber } = this.extractCountryCodeAndPhone(normalizedPhone);
+          this.logger.log(`Extracted - Country Code: ${countryCode}, Phone: ${phoneNumber}`);
 
           let user;
 
           // STEP 1: Database Query
           try {
                const query = `
-        SELECT id, phone, name, password_plain 
-        FROM users 
-        WHERE phone = $1
-      `;
-               const result = await this.pool.query(query, [normalizedPhone]);
+         SELECT id, country_code, phone, name, password_plain 
+         FROM users 
+         WHERE country_code = $1 AND phone = $2
+       `;
+               const result = await this.pool.query(query, [countryCode, phoneNumber]);
                user = result.rows[0];
           } catch (error) {
                this.logger.error('CRITICAL: Database connection or query failed', error);

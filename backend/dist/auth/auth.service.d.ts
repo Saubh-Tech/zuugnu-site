@@ -5,6 +5,7 @@ export declare class AuthService {
     private jwtService;
     private readonly logger;
     constructor(pool: Pool, jwtService: JwtService);
+    private extractCountryCodeAndPhone;
     login(phone: string, plainPassword: string): Promise<{
         access_token: string;
         user: {

@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const auth_module_1 = require("./auth/auth.module");
 const database_module_1 = require("./database/database.module");
 const config_1 = require("@nestjs/config");
+const app_controller_1 = require("./app.controller");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,7 +25,7 @@ exports.AppModule = AppModule = __decorate([
             database_module_1.DatabaseModule,
             auth_module_1.AuthModule,
         ],
-        controllers: [],
+        controllers: [app_controller_1.AppController],
         providers: [],
     })
 ], AppModule);

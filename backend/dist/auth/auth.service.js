@@ -23,17 +23,49 @@ let AuthService = AuthService_1 = class AuthService {
         this.jwtService = jwtService;
         this.logger = new common_1.Logger(AuthService_1.name);
     }
+    extractCountryCodeAndPhone(fullPhone) {
+        const digitsOnly = fullPhone.replace(/\D/g, "");
+        let countryCode = "";
+        let phoneNumber = "";
+        if (digitsOnly.startsWith("91") && digitsOnly.length === 12) {
+            countryCode = "91";
+            phoneNumber = digitsOnly.substring(2);
+        }
+        else if (digitsOnly.startsWith("1") && digitsOnly.length === 11) {
+            countryCode = "1";
+            phoneNumber = digitsOnly.substring(1);
+        }
+        else if (digitsOnly.startsWith("44") && digitsOnly.length === 12) {
+            countryCode = "44";
+            phoneNumber = digitsOnly.substring(2);
+        }
+        else if (digitsOnly.startsWith("86") && digitsOnly.length === 13) {
+            countryCode = "86";
+            phoneNumber = digitsOnly.substring(2);
+        }
+        else if (digitsOnly.length > 10) {
+            countryCode = digitsOnly.substring(0, digitsOnly.length - 10);
+            phoneNumber = digitsOnly.substring(digitsOnly.length - 10);
+        }
+        else {
+            countryCode = "";
+            phoneNumber = digitsOnly;
+        }
+        return { countryCode, phoneNumber };
+    }
     async login(phone, plainPassword) {
         const normalizedPhone = phone.replace(/\D/g, '');
         this.logger.log(`Attempting login for phone: ${normalizedPhone}`);
+        const { countryCode, phoneNumber } = this.extractCountryCodeAndPhone(normalizedPhone);
+        this.logger.log(`Extracted - Country Code: ${countryCode}, Phone: ${phoneNumber}`);
         let user;
         try {
             const query = `
-        SELECT id, phone, name, password_plain 
-        FROM users 
-        WHERE phone = $1
-      `;
-            const result = await this.pool.query(query, [normalizedPhone]);
+         SELECT id, country_code, phone, name, password_plain 
+         FROM users 
+         WHERE country_code = $1 AND phone = $2
+       `;
+            const result = await this.pool.query(query, [countryCode, phoneNumber]);
             user = result.rows[0];
         }
         catch (error) {
