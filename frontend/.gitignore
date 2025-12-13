@@ -1,6 +1,0 @@
-# Node/Next build artifacts
-node_modules/
-.next/
-out/
-.env*
-node_modules
