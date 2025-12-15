@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import LayoutContent from "@/components/LayoutContent";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -12,15 +11,18 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Zuugnu - Community-Driven Gig Platform",
-  description: "Join India's fastest-growing community-driven platform for pre-paid gigs, bidding opportunities, and skill-building. Earn by creating, amplifying, and delivering value—secured by escrow, powered by trust.",
-  keywords: "gig platform, freelance work, bidding, skill-building, India, pre-paid gigs, community",
+  description:
+    "Join India's fastest-growing community-driven platform for pre-paid gigs, bidding opportunities, and skill-building. Earn by creating, amplifying, and delivering value—secured by escrow, powered by trust.",
+  keywords:
+    "gig platform, freelance work, bidding, skill-building, India, pre-paid gigs, community",
   authors: [{ name: "Zuugnu Team" }],
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: "https://zuugnu.com",
     title: "Zuugnu - Community-Driven Gig Platform",
-    description: "Join India's fastest-growing community-driven platform for pre-paid gigs, bidding opportunities, and skill-building.",
+    description:
+      "Join India's fastest-growing community-driven platform for pre-paid gigs, bidding opportunities, and skill-building.",
     images: [
       {
         url: "https://zuugnu.com/home.2.png",
@@ -39,33 +41,33 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/favicon.icon.1.png',
-        sizes: '64x64',
-        type: 'image/png',
+        url: "/favicon.icon.1.png",
+        sizes: "64x64",
+        type: "image/png",
       },
       {
-        url: '/favicon.icon.1.png',
-        sizes: '128x128',
-        type: 'image/png',
+        url: "/favicon.icon.1.png",
+        sizes: "128x128",
+        type: "image/png",
       },
       {
-        url: '/favicon.icon.1.png',
-        sizes: '192x192',
-        type: 'image/png',
+        url: "/favicon.icon.1.png",
+        sizes: "192x192",
+        type: "image/png",
       },
     ],
     apple: {
-      url: '/favicon.icon.1.png',
-      sizes: '180x180',
-      type: 'image/png',
+      url: "/favicon.icon.1.png",
+      sizes: "180x180",
+      type: "image/png",
     },
     shortcut: {
-      url: '/favicon.icon.1.png',
-      sizes: '192x192',
-      type: 'image/png',
+      url: "/favicon.icon.1.png",
+      sizes: "192x192",
+      type: "image/png",
     },
   },
-  manifest: '/manifest.json',
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -86,20 +88,7 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
       </head>
-      <body>
-        <LayoutContent>
-          {children}
-        </LayoutContent>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed: ', err));
-              }
-            `,
-          }}
-        />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

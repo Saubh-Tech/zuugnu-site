@@ -4,6 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./auth.module.css";
+import { MasterTableModal } from "@/components/MasterTableModal";
+import ProfileForm from "@/components/ProfileForm";
+import Image from "next/image";
+import heroicon from "../../../public/zuugnu-removebg-preview.png";
 
 const COUNTRIES = [
   { code: "+1", name: "United States", flag: "🇺🇸" },
@@ -131,6 +135,9 @@ export default function AuthPage() {
   const [waError, setWaError] = useState("");
   const [pwError, setPwError] = useState("");
   const [error, setError] = useState("");
+  const [showMasterTable, setShowMasterTable] = useState(false);
+  const [showProfileForm, setShowProfileForm] = useState(false);
+
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [searchCountry, setSearchCountry] = useState("");
 
@@ -168,8 +175,8 @@ export default function AuthPage() {
       const fullPhone = `${countryCode}${whatsappNumber}`;
 
       // Use environment variable for backend URL in production
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
-      const apiUrl = backendUrl ? `${backendUrl}/auth/login` : '/auth/login';
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "";
+      const apiUrl = backendUrl ? `${backendUrl}/auth/login` : "/auth/login";
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -215,217 +222,147 @@ export default function AuthPage() {
     window.open(`https://wa.me/918800607598?text=${encodedMessage}`, "_blank");
   };
   return (
-    <main className={styles.authPage}>
-      {/* Top Banner */}
-      <div className={styles.topBanner}>
-        <h1 className={styles.bannerTitle}>Discover. Decide. Shine</h1>
-        <p className={styles.bannerSubtitle}>Where Science Meets Soul</p>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex items-center justify-center px-4 py-12">
+      <div className="absolute top-4 sm:top-6 right-4 sm:right-6 flex items-center gap-2 sm:gap-4 z-10">
+        {/* Master Table Button */}
+        <button
+          onClick={() => setShowMasterTable(true)}
+          className="group flex items-center gap-3 bg-white hover:bg-purple-50 text-gray-900 px-5 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105 border border-gray-200 hover:border-purple-300"
+          title="Master Table Management"
+        >
+          <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg text-white">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 10h16M4 14h16M4 18h16"
+              />
+            </svg>
+          </div>
+          <span className="hidden sm:inline font-semibold text-sm">
+            Master Data
+          </span>
+        </button>
+
+        {/* Career Explorer Button */}
+        <Link
+          href="/career"
+          className="group flex items-center gap-3 bg-white hover:bg-indigo-50 text-gray-900 px-5 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105 border border-gray-200 hover:border-indigo-300"
+          title="Career Explorer"
+        >
+          <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg text-white">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+          </div>
+          <span className="hidden sm:inline font-semibold text-sm">Career</span>
+        </Link>
       </div>
 
-      {/* Main Content Container */}
-      <div className={styles.authContainer}>
-        {/* Register Card */}
-        <div className={styles.authCard}>
-          <div className={styles.logo}>
-            <img
-              src="/zuugnu-removebg-preview.png"
-              alt="Zuugnu Logo"
-              className={styles.logoImg}
-            />
-          </div>
+      {/* Master Table Modal */}
+      <MasterTableModal
+        isOpen={showMasterTable}
+        onClose={() => setShowMasterTable(false)}
+      />
 
-          <h2 className={styles.title}>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <line x1="19" y1="8" x2="19" y2="14"></line>
-              <line x1="22" y1="11" x2="16" y2="11"></line>
-            </svg>
-            Register
-          </h2>
+      {/* Back to Home Button */}
+      <Link
+        href="/"
+        className="absolute top-4 sm:top-6 left-4 sm:left-6 flex items-center gap-2 bg-white bg-opacity-80 backdrop-blur-sm hover:bg-opacity-100 text-gray-700 hover:text-indigo-600 font-semibold px-3 sm:px-4 py-2 rounded-lg shadow-md transition-all transform hover:scale-105 border border-purple-200 z-10"
+      >
+        <span className="text-xl">←</span>
+        <span className="text-xl">🏠</span>
+        <span className="hidden sm:inline">Home</span>
+      </Link>
 
-          <p className={styles.description}>
-            <span style={{ marginRight: "8px", verticalAlign: "middle" }}>
-              Whatsapp
-            </span>
-            <span className={styles.highlight}>
-              "Register + Your Full Name"
-            </span>
-            <br />
-            <a href="https://wa.me/918800607598" className={styles.link}>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                style={{ display: "inline", marginRight: "4px" }}
-              >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-              </svg>
-              +91 8800607598
-            </a>
-            <br />
-            To receive Login Password <br />
-            ex: Register John Doe
-          </p>
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+      </div>
 
-          <form className={styles.form}>
-            <input
-              type="text"
-              placeholder="Enter your Full Name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className={styles.input}
-              aria-label="Full name"
-            />
-            <button
-              type="button"
-              onClick={handleOpenWhatsApp}
-              className={styles.whatsappBtn}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-              </svg>
-              Open WhatsApp Chat
-            </button>
-          </form>
-        </div>
-
-        {/* Sign In Card */}
-        <div className={styles.authCard}>
-          <div className={styles.logo}>
-            <img
-              src="/zuugnu-removebg-preview.png"
-              alt="Zuugnu Logo"
-              className={styles.logoImg}
-            />
-          </div>
-
-          <h2 className={styles.title}>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-              <polyline points="10 17 15 12 10 7"></polyline>
-              <line x1="15" y1="12" x2="3" y2="12"></line>
-            </svg>
-            Sign In
-          </h2>
-
-          {/* ERROR MESSAGE DISPLAY */}
-          {error && (
-            <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-2 rounded-lg text-sm text-center mb-4">
-              {error}
-            </div>
-          )}
-
-          <form
-            onSubmit={handleSignInSubmit}
-            className={styles.form}
-            autoComplete="off"
-          >
-            <div className={styles.phoneInputGroup}>
-              <div className={styles.countryCodeDropdown}>
-                <button
-                  id="countryButton"
-                  type="button"
-                  className={styles.countryCodeBtn}
-                  onClick={() => {
-                    setShowCountryDropdown(!showCountryDropdown);
-                    setSearchCountry("");
-                  }}
-                >
-                  <span className={styles.countryCodeDisplay}>
-                    {COUNTRIES.find((c) => c.code === countryCode)?.flag}{" "}
-                    {countryCode}
-                  </span>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-
-                {showCountryDropdown && (
-                  <div
-                    id="countryDropdown"
-                    className={styles.countryDropdownMenu}
-                  >
-                    <div className={styles.countrySearchBox}>
-                      <input
-                        type="text"
-                        placeholder="Search country..."
-                        value={searchCountry}
-                        onChange={(e) =>
-                          setSearchCountry(e.target.value.toUpperCase())
-                        }
-                        className={styles.countrySearchInput}
-                        autoFocus
-                      />
-                    </div>
-                    <div className={styles.countryList}>
-                      {COUNTRIES.filter(
-                        (country) =>
-                          country.name.toUpperCase().includes(searchCountry) ||
-                          country.code.includes(searchCountry)
-                      ).map((country) => (
-                        <button
-                          key={country.code + country.name}
-                          type="button"
-                          className={styles.countryOption}
-                          onClick={() => {
-                            setCountryCode(country.code);
-                            setShowCountryDropdown(false);
-                            setSearchCountry("");
-                          }}
-                        >
-                          <span className={styles.countryFlag}>
-                            {country.flag}
-                          </span>
-                          <span className={styles.countryName}>
-                            {country.name}
-                          </span>
-                          <span className={styles.countryPhoneCode}>
-                            {country.code}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+      <div className="relative z-10 w-full max-w-6xl mt-16 sm:mt-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Register Card */}
+          <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-3xl p-8 sm:p-12 border border-purple-200 shadow-2xl hover:shadow-purple-300 transition-all">
+            <div className="text-center mb-8">
+              <div className="mb-6 flex justify-center">
+                <Image
+                  src={heroicon}
+                  alt="Zuugnu"
+                  width={120}
+                  height={60}
+                  loading="lazy"
+                  className="max-w-[120px] h-auto"
+                />
               </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-2">
+                <span className="text-2xl">👤</span> Register
+              </h2>
+            </div>
 
-              <div className={styles.inputWrapper}>
+            <div className="space-y-6">
+              <div className="text-center space-y-2">
+                <p className="text-gray-800 font-semibold text-lg">
+                  Type "Register + Your Full Name"
+                </p>
+                <p className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-purple-50 text-purple-700 font-semibold shadow-sm">
+                  <span className="text-sm uppercase tracking-wide text-purple-500 flex items-center gap-1">
+                    WhatsApp
+                    <svg
+                      className="w-5 h-5 text-green-500"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                    </svg>
+                  </span>
+                  <span className="text-base">+91 8800607598</span>
+                </p>
+                <p className="text-gray-600 text-sm">
+                  To receive Login Password
+                </p>
+              </div>
+            </div>
+
+            <form className="pt-4 border-t border-purple-300 mt-4">
+              <input
+                type="text"
+                placeholder="Enter your Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full bg-white text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                aria-label="Full name"
+              />
+              <button
+                type="button"
+                onClick={handleOpenWhatsApp}
+                className="mt-3 flex items-center justify-center gap-3 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-xl transition-all hover:scale-105 shadow-lg"
+              >
                 <svg
-                  className={styles.inputIcon}
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
@@ -433,128 +370,187 @@ export default function AuthPage() {
                 >
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
                 </svg>
-                <input
-                  type="tel"
-                  inputMode="tel"
-                  placeholder="Enter your whatsapp number"
-                  value={whatsappNumber}
-                  onChange={(e) => setWhatsappNumber(e.target.value)}
-                  className={styles.input}
-                  aria-label="WhatsApp Number"
-                  name="signin-phone"
-                  autoComplete="off"
-                  required
+                Open WhatsApp Chat
+              </button>
+            </form>
+          </div>
+
+          {/* Sign In Card */}
+          <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-3xl p-8 sm:p-12 border border-purple-200 shadow-2xl hover:shadow-purple-300 transition-all">
+            <div className="text-center mb-8">
+              <div className="mb-6 flex justify-center">
+                <Image
+                  src={heroicon}
+                  alt="Zuugnu"
+                  width={120}
+                  height={60}
+                  loading="lazy"
+                  className="max-w-[120px] h-auto"
                 />
               </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-2">
+                <span className="text-2xl">↪️</span> Sign In
+              </h2>
             </div>
 
-            <div className={styles.inputWrapper}>
-              <svg
-                className={styles.inputIcon}
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={styles.input}
-                aria-label="Password"
-                name="signin-password"
-                autoComplete="new-password"
-                required
-              />
+            {/* ERROR MESSAGE DISPLAY */}
+            {error && (
+              <div className="bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-2 rounded-lg text-sm text-center mb-4">
+                {error}
+              </div>
+            )}
+
+            <form
+              onSubmit={handleSignInSubmit}
+              autoComplete="off"
+              className="w-full flex flex-col gap-6"
+            >
+              {/* Phone Input Group */}
+              <div className="flex gap-3 w-full">
+                {/* Country Code */}
+                <div className="relative shrink-0 z-50">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCountryDropdown(!showCountryDropdown);
+                      setSearchCountry("");
+                    }}
+                    className="flex items-center justify-center gap-2 px-3 py-4 min-w-[90px] bg-white text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  >
+                    <span className="flex items-center gap-1 text-base">
+                      {COUNTRIES.find((c) => c.code === countryCode)?.flag}
+                      {countryCode}
+                    </span>
+                    <svg
+                      className="w-4 h-4 text-slate-300"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+
+                  {showCountryDropdown && (
+                    <div className="absolute top-[calc(100%+8px)] left-0 w-[280px] max-h-[400px] bg-slate-900/95 border border-violet-400/30 rounded-xl backdrop-blur shadow-xl flex flex-col overflow-hidden animate-slideDown">
+                      <div className="p-3 border-b border-violet-400/20">
+                        <input
+                          autoFocus
+                          placeholder="Search country..."
+                          value={searchCountry}
+                          onChange={(e) =>
+                            setSearchCountry(e.target.value.toUpperCase())
+                          }
+                          className="w-full px-3 py-2 rounded-lg border border-slate-600/30 text-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+                        />
+                      </div>
+
+                      <div className="flex-1 overflow-y-auto">
+                        {COUNTRIES.filter(
+                          (c) =>
+                            c.name.toUpperCase().includes(searchCountry) ||
+                            c.code.includes(searchCountry)
+                        ).map((country) => (
+                          <button
+                            key={country.code}
+                            type="button"
+                            onClick={() => {
+                              setCountryCode(country.code);
+                              setShowCountryDropdown(false);
+                              setSearchCountry("");
+                            }}
+                            className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left text-sm text-slate-300 border-l-4 border-transparent hover:bg-violet-400/15 hover:text-violet-300 hover:border-violet-400 transition"
+                          >
+                            <span className="text-lg">{country.flag}</span>
+                            <span className="flex-1 truncate font-medium">
+                              {country.name}
+                            </span>
+                            <span className="text-blue-400 font-bold text-xs">
+                              {country.code}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Phone Input */}
+                <div className="relative flex-1">
+                  <svg
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-green-500"
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487z" />
+                  </svg>
+
+                  <input
+                    type="tel"
+                    placeholder="Enter your WhatsApp number"
+                    value={whatsappNumber}
+                    onChange={(e) => setWhatsappNumber(e.target.value)}
+                    required
+                    className="w-full pl-12 pr-4 py-4 bg-white text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="relative w-full">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  className="w-full pl-4 pr-12 py-4 bg-white text-gray-800 placeholder-gray-400 rounded-xl px-4 py-3 border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                />
+
+                {/* Eye Icon Inside Input */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 transition-colors text-lg"
+                >
+                  {showPassword ? "👁️" : "👁️‍🗨️"}
+                </button>
+              </div>
+
+              {/* Submit */}
               <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className={styles.eyeBtn}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                type="submit"
+                className="flex items-center justify-center gap-2 py-4 rounded-xl text-white text-lg font-semibold bg-gradient-to-r from-blue-500 via-violet-500 to-purple-500 bg-[length:200%] hover:bg-right transition shadow-lg hover:-translate-y-1"
               >
-                {showPassword ? (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                  </svg>
-                ) : (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                )}
+                Submit
               </button>
-            </div>
 
-            <button type="submit" className={styles.submitBtn}>
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              {/* Forgot */}
+              <Link
+                href="/forgot-password"
+                className="text-center text-slate-300 text-sm hover:text-white relative after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-1 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-violet-400 after:to-pink-400 hover:after:w-full after:transition-all"
               >
-                <polyline points="9 11 12 14 22 4"></polyline>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-              </svg>
-              Submit
-            </button>
-
-            {/* <button type="button" className={styles.submitBtn} style={{ marginTop: '10px' }} onClick={() => window.location.href = '/dashboard'}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 11 12 14 22 4"></polyline>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-              </svg>
-              Dashboard
-            </button> */}
-
-            <Link href="/forgot-password" className={styles.forgotLink}>
-              Forgot Password?
-            </Link>
-          </form>
+                Forgot Password?
+              </Link>
+            </form>
+          </div>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className={styles.footerRow}>
-        <div className={styles.footerLeft}>
-          <Link href="/" className={styles.backLink}>
-            ← Back to Home
-          </Link>
-        </div>
-        <div className={styles.footerRight}>
+      <div className="absolute bottom-4 left-0 right-0 text-center">
+        <p className="text-gray-600 text-sm font-medium">
           © 2025 Zuugnu.com | All rights reserved
-        </div>
-      </footer>
-    </main>
+        </p>
+      </div>
+
+      {/* Profile Form Modal */}
+      {showProfileForm && (
+        <ProfileForm onClose={() => setShowProfileForm(false)} />
+      )}
+    </div>
   );
 }
